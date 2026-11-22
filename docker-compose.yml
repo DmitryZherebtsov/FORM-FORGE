@@ -1,0 +1,41 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      APP_PORT: "8000"
+      AUTH_REQUIRED: "true"
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-CHANGE_ME_IN_PRODUCTION}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      MAX_UPLOAD_SIZE_BYTES: ${MAX_UPLOAD_SIZE_BYTES:-20971520}
+      CORS_ORIGINS: "${CORS_ORIGINS:-[]}"
+      DEMO_ACCESS_KEY: ${DEMO_ACCESS_KEY:-demo-key-change-me}
+      ENABLE_LLM: "${ENABLE_LLM:-false}"
+      AI_PROVIDER: "${AI_PROVIDER:-openai_compat}"
+      AI_BASE_URL: "${AI_BASE_URL:-}"
+      AI_MODEL_NAME: "${AI_MODEL_NAME:-hf.co/speakleash/Bielik-11B-v3.0-Instruct-GGUF:Q4_K_M}"
+      AI_TIMEOUT_SECONDS: "${AI_TIMEOUT_SECONDS:-90}"
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=256m
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "from urllib.request import urlopen; urlopen('http://127.0.0.1:8000/api/v1/health', timeout=2)"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"

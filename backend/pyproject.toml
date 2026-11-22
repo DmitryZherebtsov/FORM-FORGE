@@ -1,0 +1,51 @@
+[project]
+name = "coi-form-digitization"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "Alexandr", email = "evospeed5@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi>=0.165.0",
+    "filetype>=1.2.0",
+    "httpx>=0.28.1",
+    "odfpy>=1.4.1",
+    "openpyxl>=3.1.5",
+    "pdfplumber>=0.11.11",
+    "pillow>=13.0.0",
+    "pydantic>=2.14.4",
+    "pydantic-settings>=2.16.3",
+    "pyjwt>=2.15.1",
+    "pypdf>=7.1.1",
+    "python-docx>=1.2.0",
+    "python-multipart>=0.0.34",
+    "rapidocr-onnxruntime>=1.4.4",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[project.scripts]
+coi-form-digitization = "coi_form_digitization:main"
+
+[build-system]
+requires = ["uv_build>=0.13.9,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "pytest-asyncio>=0.26.0",
+    "ruff>=0.17.6",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501", "B008"]
