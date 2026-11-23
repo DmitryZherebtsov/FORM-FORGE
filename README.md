@@ -1,4 +1,4 @@
-# COI Form Digitization
+# COI Form Digitization (HackNation 2026)
 
 A local API and web workspace for converting public administration forms into editable structured JSON.
 
